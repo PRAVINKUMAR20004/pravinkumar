@@ -24,16 +24,14 @@ jobs:
 
       - name: Build and push client image
         run: |
-          docker buildx build \
-            -f apps/app1/Dockerfile.client \
-            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} \
-            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest \
-            ./apps/app1 --push
+          docker build -f apps/app1/Dockerfile.client -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} ./apps/app1
+          docker tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest
 
       - name: Build and push server image
         run: |
-          docker buildx build \
-            -f apps/app1/Dockerfile.server \
-            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} \
-            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest \
-            ./apps/app1 --push
+          docker build -f apps/app1/Dockerfile.server -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} ./apps/app1
+          docker tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest
