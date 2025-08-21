@@ -3,16 +3,15 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - deploy   # Run pipeline only when code is pushed to 'deploy' branch
+      - deploy
   pull_request:
     branches:
-      - deploy   # Run for PRs targeting 'deploy'
-  workflow_dispatch:   # Allows manual run from GitHub Actions UI
+      - deploy
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,14 +24,16 @@ jobs:
 
       - name: Build and push client image
         run: |
-          docker build -f apps/app1/Dockerfile.client -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} ./apps/app1
-          docker tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest
+          docker buildx build \
+            -f apps/app1/Dockerfile.client \
+            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest \
+            ./apps/app1 --push
 
       - name: Build and push server image
         run: |
-          docker build -f apps/app1/Dockerfile.server -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} ./apps/app1
-          docker tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest
+          docker buildx build \
+            -f apps/app1/Dockerfile.server \
+            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest \
+            ./apps/app1 --push
