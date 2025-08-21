@@ -23,19 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push client image
-        run: |
-          docker buildx build \
-            --file apps/app1/Dockerfile.client \
-            --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} \
-            --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest \
-            --push \
-            ./apps/app1
+        run: docker buildx build --file apps/app1/Dockerfile.client --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-${{ github.sha }} --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:client-latest --push ./apps/app1
 
       - name: Build and push server image
-        run: |
-          docker buildx build \
-            --file apps/app1/Dockerfile.server \
-            --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} \
-            --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest \
-            --push \
-            ./apps/app1
+        run: docker buildx build --file apps/app1/Dockerfile.server --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-${{ github.sha }} --tag ${{ secrets.DOCKER_USERNAME }}/my-hosting-sever:server-latest --push ./apps/app1
