@@ -3,15 +3,16 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - deploy   # 👈 run pipeline only when code is pushed to 'deploy' branch
+      - deploy   # Run pipeline only when code is pushed to 'deploy' branch
   pull_request:
     branches:
-      - deploy   # 👈 run for PRs targeting 'deploy'
-  workflow_dispatch:   # 👈 allows manual run from GitHub Actions UI
+      - deploy   # Run for PRs targeting 'deploy'
+  workflow_dispatch:   # Allows manual run from GitHub Actions UI
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
